@@ -60,4 +60,19 @@ async def teamurl():
     msg=discord.Embed(title="Team-URL", description="https://ctftime.org/team/40222")
     await client.say(embed=msg)
 
+   
+async def rankings():
+    r = requests.get("https://ctftime.org/api/v1/results/")
+data = r.json()
+
+for ctf in data:
+    r = requests.get("https://ctftime.org/api/v1/results/")
+    data = r.json()
+    for ctf in data:
+        for team in data[ctf]['scores']:
+            if(team['team_id'] == 40222):
+                print(data[ctf]['title'])
+                print(team['place'])
+
+
 client.run(TOKEN)
