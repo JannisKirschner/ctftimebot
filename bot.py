@@ -5,6 +5,7 @@ import discord
 import feedparser
 import os
 import pytz
+import requests
 
 BOT_PREFIX = ("?", "!")
 TOKEN = os.environ['TOKEN']
@@ -47,5 +48,16 @@ async def ctf():
         msg=discord.Embed(title=post.title, url=post.url, description=description)
         msg.set_thumbnail(url="https://ctftime.org"+post.logo_url)
         await client.say(embed=msg)
+        
+async def place(year):
+    r = requests.get("https://ctftime.org/api/v1/teams/40222/")
+    teaminfo = r.json()
+    rating = data['rating'][0][str(year)]['rating_place']    
+    msg=discord.Embed(title="Ranking %s" % (year), description="Place: %s" % (rating))
+    await client.say(embed=msg)
+    
+async def teamurl():
+    msg=discord.Embed(title="Team-URL", description="https://ctftime.org/team/40222")
+    await client.say(embed=msg)
 
 client.run(TOKEN)
