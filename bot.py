@@ -48,31 +48,39 @@ async def ctf():
         msg=discord.Embed(title=post.title, url=post.url, description=description)
         msg.set_thumbnail(url="https://ctftime.org"+post.logo_url)
         await client.say(embed=msg)
-        
+
+@client.command()
 async def place(year):
     r = requests.get("https://ctftime.org/api/v1/teams/40222/")
     teaminfo = r.json()
     rating = data['rating'][0][str(year)]['rating_place']    
     msg=discord.Embed(title="Ranking %s" % (year), description="Place: %s" % (rating))
     await client.say(embed=msg)
-    
+
+@client.command()
 async def teamurl():
     msg=discord.Embed(title="Team-URL", description="https://ctftime.org/team/40222")
     await client.say(embed=msg)
 
-   
-async def rankings():
-    r = requests.get("https://ctftime.org/api/v1/results/")
-data = r.json()
-
-for ctf in data:
+@client.command   
+async def rankings(teamnr):
     r = requests.get("https://ctftime.org/api/v1/results/")
     data = r.json()
     for ctf in data:
         for team in data[ctf]['scores']:
-            if(team['team_id'] == 40222):
+            if(team['team_id'] == teamnr)
                 print(data[ctf]['title'])
                 print(team['place'])
 
+                   
+@client.command()
+async def searchplace(teamnr,ctfchoice):
+    r = requests.get("https://ctftime.org/api/v1/results/")
+    data = r.json()
+    for ctf in data:
+        for team in data[ctf]['scores']:
+            if(team['team_id'] == teamnr and ctfchoice.lower() in data[ctf]['title'].lower()):
+                print(data[ctf]['title'])
+                print(team['place'])
 
 client.run(TOKEN)
